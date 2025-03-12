@@ -16,7 +16,7 @@
 - Implemented.
 
 • GPS and Vehicle Tracking: Integration of GPS tracking for rented vehicles;
-- Not implemented.
+- Not implemented. I don't know how to implement it.
 
 • Maintenance and Service Records: Tracking maintenance and service history of vehicles;
 - Maintenance and Service Records and Damage and Incident Reporting were implemented in a single file.
@@ -29,6 +29,8 @@
   
 • Customer Feedback and Reviews: Collecting and managing customer feedback on rentals.
 - Implemented
+
+  main.py is not functional.
 
 Added the following concepts to the project:
 
