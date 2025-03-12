@@ -8,39 +8,48 @@ class Reports:
 
 class Maintenance(Reports):
     
-    def __init__(self, maintenance_date, maintenance_details,):
+    def __init__(self, car_id, maintenance_date, maintenance_details):
+
+        self.car_id = car_id
         self.maintenance_date = maintenance_date
         self.maintenance_details = maintenance_details
+        
     
     def __str__(self):
-        return f"{self.maintenance_date}: {self.maintenance_details}"   
+        return f"Car ID: {self.car_id}\nReport type: Maintenance\n{self.maintenance_date}: {self.maintenance_details}\n"   
 
 class Service(Reports):
     
-    def __init__(self, service_date, service_details):
+    def __init__(self, car_id, service_date, service_details):
+        
+        self.car_id = car_id
         self.service_date = service_date
         self.service_details = service_details
     
     def __str__(self):
-        return f"{self.service_date}: {self.service_details}"
+        return f"Car ID: {self.car_id}\nReport type: Service\n{self.service_date}: {self.service_details}\n"
 
 class Damage(Reports):
     
-    def __init__(self, damage_date, damage_details):
+    def __init__(self, car_id, damage_date, damage_details):
+        
+        self.car_id = car_id
         self.damage_date = damage_date
         self.damage_details = damage_details
     
     def __str__(self):
-        return f"{self.damage_date}: {self.damage_details}"
+        return f"Car ID: {self.car_id}\nReport type: Damage\n{self.damage_date}: {self.damage_details}\n"
 
 class Incident(Reports):
     
-    def __init__(self, incident_date, incident_details):
+    def __init__(self, car_id, incident_date, incident_details):
+
+        self.car_id = car_id
         self.incident_date = incident_date
         self.incident_details = incident_details
     
     def __str__(self):
-        return f"{self.incident_date}: {self.incident_details}"
+        return f"Car ID: {self.car_id}\nReport type: Incident\n{self.incident_date}: {self.incident_details}\n"
 
 
 class Customer:
@@ -222,29 +231,38 @@ class Car_Reports_Management_Menu(Menus):
         print('2. Service Menu')
         print('3. Damage Menu')
         print('4. Incident Menu')
-        print('5. Exit')
+        print('5. See Report History')
+        print('6. Exit')
 
     def maintenance_submenu_header(self):
         print('Maintenance Menu\n')
     
     def maintenance_submenu(self):
         print('1. Add new maintenance report')
-        print('2. See maintenance record')
-        print('3. Return')
+        print('2. Return')
     
+    def service_submenu_header(self):
+        print('Service Menu\n')
+
     def service_submenu(self):
         print('1. Add new service report')
-        print('2. See service record')
-        print('3. Return')
+        print('2. Return')
 
+    def damage_submenu_header(self):
+        print('Damage Menu\n')
+    
     def damage_submenu(self):
         print('1. Add new damage report')
-        print('2. See damage record')
-        print('3. Return')
+        print('2. Return')
 
+    def incident_submenu_header(self):
+        print('Incident Menu\n')
+    
     def incident_submenu(self):
         print('1. Add new incident report')
-        print('2. See incident record')
-        print('3. Return')
+        print('2. Return')
+
+    def record_history_header(self):
+        print('Record History\n')
         
 
