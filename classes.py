@@ -223,25 +223,28 @@ class Car_Reports_Management_Menu(Menus):
         print('3. Damage Menu')
         print('4. Incident Menu')
         print('5. Exit')
+
+    def maintenance_submenu_header(self):
+        print('Maintenance Menu\n')
     
     def maintenance_submenu(self):
         print('1. Add new maintenance report')
         print('2. See maintenance record')
-        print('3. Exit')
+        print('3. Return')
     
     def service_submenu(self):
         print('1. Add new service report')
         print('2. See service record')
-        print('3. Exit')
+        print('3. Return')
 
     def damage_submenu(self):
         print('1. Add new damage report')
         print('2. See damage record')
-        print('3. Exit')
+        print('3. Return')
 
     def incident_submenu(self):
         print('1. Add new incident report')
         print('2. See incident record')
-        print('3. Exit')
+        print('3. Return')
         
 
