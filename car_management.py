@@ -50,5 +50,3 @@ def main_car_management():
 
     os.system('cls')
 
-
-main_car_management()

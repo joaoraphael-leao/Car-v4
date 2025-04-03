@@ -37,5 +37,3 @@ def main_car_customer_feedback_and_reviews():
 
     os.system('cls')
 
-main_car_customer_feedback_and_reviews()
-

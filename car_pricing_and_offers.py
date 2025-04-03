@@ -97,4 +97,3 @@ def main_car_pricing_and_offers():
                 os.system('cls')
                 print(cars_special_offers)
     os.system('cls')
-main_car_pricing_and_offers()

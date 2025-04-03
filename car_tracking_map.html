@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_f54d87099aa3eca428d605a6880e48fa {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_f54d87099aa3eca428d605a6880e48fa" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_f54d87099aa3eca428d605a6880e48fa = L.map(
+                "map_f54d87099aa3eca428d605a6880e48fa",
+                {
+                    center: [-9.55362515, -35.77390061149683],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 12,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_ad87d6bdc9bca86f55d3dbe632527781 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_ad87d6bdc9bca86f55d3dbe632527781.addTo(map_f54d87099aa3eca428d605a6880e48fa);
+        
+    
+            var marker_68d20035b5f3718cf108e48ce6a2641a = L.marker(
+                [-9.55362515, -35.77390061149683],
+                {
+}
+            ).addTo(map_f54d87099aa3eca428d605a6880e48fa);
+        
+    
+            var icon_5b86feb5af82977f22864716f5f52c4c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_85ec3553234616373411089b5e70ddc8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e245fba50b769a249f29f9a0184f19c4 = $(`<div id="html_e245fba50b769a249f29f9a0184f19c4" style="width: 100.0%; height: 100.0%;">         <b>Carro ID:</b> 1<br>                      <b>Marca:</b> ford<br>             <b>Modelo:</b> ka<br>             <b>Cor:</b> azul<br>                      <b>Cliente:</b> Joao<br>         <b>Status:</b> Reservado (não iniciado)<br>         <b>Endereço:</b> UFAL Campus A.C Simoes<br>         <b>Início:</b> 25/11/2025<br>         <b>Fim:</b> 26/11/2025<br>         </div>`)[0];
+                popup_85ec3553234616373411089b5e70ddc8.setContent(html_e245fba50b769a249f29f9a0184f19c4);
+            
+        
+
+        marker_68d20035b5f3718cf108e48ce6a2641a.bindPopup(popup_85ec3553234616373411089b5e70ddc8)
+        ;
+
+        
+    
+    
+                marker_68d20035b5f3718cf108e48ce6a2641a.setIcon(icon_5b86feb5af82977f22864716f5f52c4c);
+            
+</script>
+</html>

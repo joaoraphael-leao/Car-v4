@@ -145,7 +145,5 @@ def car_reports_management_main():
             menu.record_history_header()
             for i in range(len(records)):
                 print(records[i])                    
-
-car_reports_management_main()
                 
 

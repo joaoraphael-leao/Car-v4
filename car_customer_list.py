@@ -43,4 +43,3 @@ def customer_main():
                 print(customers_list[i])
     os.system('cls')
         
-customer_main()

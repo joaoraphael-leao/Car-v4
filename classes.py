@@ -149,6 +149,7 @@ class Menu_Selector(Menus):
         print("5. Payment Processing Menu")
         print("6. Rental Agreements Menu")
         print("7. Pricing and Offers Menu")
+        print("8. Car Tracking Menu")
         
 class Management_Menu(Menus):
 
@@ -266,3 +267,117 @@ class Car_Reports_Management_Menu(Menus):
         print('Record History\n')
         
 
+class GPS_Tracking:
+    def __init__(self, car_id, latitude=0.0, longitude=0.0, status="inactive"):
+        self.car_id = car_id
+        self.latitude = latitude
+        self.longitude = longitude
+        self.last_update = None
+        self.status = status  # 'active', 'inactive', 'maintenance'
+        self.tracking_history = []
+        
+        # Informações adicionais para integração com sistema de reservas
+        self.reservation_id = None
+        self.reservation_start = None
+        self.reservation_end = None
+        self.address = None
+        self.brand = None
+        self.model = None
+    
+    def update_location(self, latitude, longitude, timestamp=None):
+        import datetime
+        
+        if timestamp is None:
+            timestamp = datetime.datetime.now()
+            
+        # Atualizar localização atual
+        self.latitude = latitude
+        self.longitude = longitude
+        self.last_update = timestamp
+        
+        # Adicionar ao histórico
+        self.tracking_history.append({
+            'timestamp': timestamp,
+            'latitude': latitude,
+            'longitude': longitude
+        })
+    
+    def activate(self):
+        self.status = "active"
+    
+    def deactivate(self):
+        self.status = "inactive"
+    
+    def set_maintenance(self):
+        self.status = "maintenance"
+    
+    def get_current_location(self):
+        return {
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'last_update': self.last_update,
+            'status': self.status
+        }
+    
+    def get_tracking_history(self):
+        return self.tracking_history
+    
+    def calculate_distance_traveled(self):
+        from geopy.distance import geodesic
+        
+        if len(self.tracking_history) < 2:
+            return 0
+        
+        total_distance = 0
+        for i in range(1, len(self.tracking_history)):
+            point1 = (self.tracking_history[i-1]['latitude'], self.tracking_history[i-1]['longitude'])
+            point2 = (self.tracking_history[i]['latitude'], self.tracking_history[i]['longitude'])
+            total_distance += geodesic(point1, point2).kilometers
+        
+        return total_distance
+    
+    def generate_map(self, filename="vehicle_map.html"):
+        """Gera um mapa com a localização atual e histórico"""
+        import folium
+        import os
+        
+        # Criar mapa centrado na localização atual
+        map = folium.Map(location=[self.latitude, self.longitude], zoom_start=14)
+        
+        # Determinar cor com base no status
+        marker_color = 'green' if self.status == 'active' else 'red'
+        
+        # Adicionar marcador para posição atual com ícone de carro
+        folium.Marker(
+            [self.latitude, self.longitude],
+            popup=f"Car ID: {self.car_id}<br>Status: {self.status}",
+            icon=folium.Icon(color=marker_color, icon='car', prefix='fa')
+        ).add_to(map)
+        
+        # Adicionar linha para o histórico de rastreamento
+        if len(self.tracking_history) > 1:
+            points = [(entry['latitude'], entry['longitude']) for entry in self.tracking_history]
+            folium.PolyLine(points, color="blue", weight=2.5, opacity=0.7).add_to(map)
+        
+        # Salvar o mapa
+        map_path = os.path.join(os.path.dirname(__file__), filename)
+        map.save(map_path)
+        return map_path
+    
+    def __str__(self):
+        status_text = "Ativo" if self.status == "active" else "Inativo" if self.status == "inactive" else "Em manutenção"
+        reservation_text = f"Reserva: {self.reservation_id} (Início: {self.reservation_start}, Fim: {self.reservation_end})" if self.reservation_id else "Sem reserva"
+        return f"Rastreamento do Carro ID: {self.car_id} ({self.brand} {self.model})\nStatus: {status_text}\nLocalização: {self.latitude}, {self.longitude}\nEndereço: {self.address}\n{reservation_text}\nÚltima atualização: {self.last_update}"
+
+
+class Car_GPS_Tracking_Menu(Menus):
+    def show_menu(self):
+        print("GPS e Rastreamento de Veículos\n")
+    
+    def interact_menu(self):
+        print('1. Iniciar Rastreamento')
+        print('2. Parar Rastreamento')
+        print('3. Ver Localização Atual')
+        print('4. Ver Histórico de Rastreamento')
+        print('5. Visualizar Mapa')
+        print('6. Sair')

@@ -76,5 +76,3 @@ def main_payment_processing():
             refund_requests[user_input] = input("Insert the reason you want to make a Refund.\n")  
 
     os.system('cls')        
-
-main_payment_processing()

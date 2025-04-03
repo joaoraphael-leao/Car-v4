@@ -49,5 +49,4 @@ def main_car_rental_agreement():
             os.system('cls')
             print("Agreements List\n")
             print(agreements_list)
-main_car_rental_agreement()
             
