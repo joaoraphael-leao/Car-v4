@@ -63,3 +63,8 @@ def correct_car_data(car_id):
 def show_cars():
     for car in cars.values():
         print(car)
+
+def show_available_cars():
+    for car in cars.values():
+        if car.is_available:
+            print(car)
