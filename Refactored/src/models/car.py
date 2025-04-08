@@ -1,8 +1,8 @@
 from typing import override
 
 class Car:
-    def __init__(self, id, model, brand, year, license_plate, daily_rate, is_available=True):
-        self.__id = id
+    def __init__(self, model, brand, year, license_plate, daily_rate, is_available=True):
+        self.__id = None
         self.__model = model
         self.__brand = brand
         self.__year = year
@@ -10,6 +10,11 @@ class Car:
         self.__daily_rate = daily_rate
         self.__is_available = is_available
     
+    def set_id(self, id):
+        if self.__id is not None:
+            raise ValueError("ID cannot be changed")
+        self.__id = id
+
     @property
     def id(self):
         return self.__id
