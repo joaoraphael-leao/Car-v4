@@ -1,11 +1,16 @@
 class BookingBuilder:
     def __init__(self):
+        self.__id = None
         self.__car_id = None
         self.__customer_email = None
         self.__start_date = None
         self.__end_date = None
         self.__cost = None
     
+    def com_id(self, id_passed):
+        self.__id = id_passed
+        return self
+
     def com_car_id(self, car_id):
         self.__car_id = car_id
         return self
@@ -38,15 +43,16 @@ class BookingBuilder:
         if self.__cost is None:
             raise ValueError("Cost is required")
 
-        return Booking(self.__car_id, self.__customer_email, self.__start_date, self.__end_date, self.__cost)
+        return Booking(self.__car_id, self.__customer_email, self.__start_date, self.__end_date, self.__cost, self.__id)
 
 class Booking:
-    def __init__(self, car_id, customer_email, start_date, end_date, cost):
+    def __init__(self, car_id, customer_email, start_date, end_date, cost, id_passed):
         self.__car_id = car_id
         self.__customer_email = customer_email
         self.__start_date = start_date
         self.__end_date = end_date
-        self.__id= None
+        self.__cost = cost
+        self.__id= id_passed
     
     def __str__(self):
         return f"Booking ID: {self.__id}\n  Car ID: {self.__car_id}\nCustomer Email: {self.__customer_email}\nStart Date: {self.__start_date}\nEnd Date: {self.__end_date}\nCost: {self.__cost}"

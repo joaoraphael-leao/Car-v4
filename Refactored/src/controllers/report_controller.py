@@ -24,10 +24,13 @@ def add_relatory():
     show_bookings_by_user(customer)
 
     book = input("Escolha a reserva no qual você tem um relatório a fazer: ")
-    if not bookings[book_id]:
-        print("Reserva não encontrado.")
+    if book_id not in bookings:  # Corrigido a verificação
+        print("Reserva não encontrada.")
         return None
-    elif bookings[book_id].customer_email != customer:
+    
+    booking = bookings[book_id]
+
+    if booking.customer_email != customer:
         print("Essa reserva não pertence a você.")
         return None
     

@@ -1,13 +1,14 @@
-from src.controllers.global_dicts import bookings, BOOKINGS_ID
+from src.controllers.global_dicts import bookings, BOOKINGS_ID, feedbacks
 from src.controllers.global_dicts import cars
 from src.controllers.global_dicts import customers
 from src.controllers.customer_controller import login
 from src.controllers.car_controller import show_available_cars
 from src.models.booking import BookingBuilder
-from src.utils.dates.py import validate_date
+from src.utils.dates import validate_date
 
 ## Create booking
 def create_booking():
+    global BOOKINGS_ID
     customer_email = login().email
     show_available_cars()
 
@@ -27,6 +28,7 @@ def create_booking():
     booking.com_start_date(start_date)
     booking.com_end_date(end_date)
     booking.com_cost(cost)
+    booking.com_id(BOOKINGS_ID)
     booking.build()
 
     bookings[BOOKINGS_ID] = booking
@@ -65,7 +67,7 @@ def update_booking():
     print("3. Update car")
 
     option = input("Select an option: ")
-    if option == "1"
+    if option == "1":
         new_start_date = input("Enter new start date (YYYY-MM-DD): ")
         try:
             validate_date(new_start_date, booking.end_date)
@@ -116,3 +118,32 @@ def show_bookings_by_user(user_email):
         return None
     for booking in user_bookings:
         print(booking)
+
+def give_feedback():
+    email = input("Enter your email: ")
+    password = input("Enter your password: ")
+    if email not in customers or customers[email].password != password:
+        print("Invalid email or password.")
+        return None
+    show_bookings_by_user(email)
+    booking_id = input("Enter booking ID to give feedback: ")
+    booking = bookings.get(booking_id)
+    if not booking:
+        print("Booking not found.")
+        return None
+    if booking.customer_email != email:
+        print("You are not authorized to give feedback for this booking.")
+        return None
+    rating = input("Enter your rating (1-5): ")
+    feedback = input("Enter your feedback: ")
+    feedback = {
+        "user": email,
+        "car": booking.car_id,
+        "rating": rating,
+        "feedback": feedback
+    }
+    feedbacks.append(feedback)
+
+def show_feedbacks():
+    for feedback in feedbacks:
+        print(feedback)

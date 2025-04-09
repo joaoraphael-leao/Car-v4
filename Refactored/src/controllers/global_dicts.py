@@ -2,7 +2,7 @@ cars = {}
 customers = {}
 bookings = {}
 reports = {}
-
+feedbacks = {}
 CUSTOMERS_ID = 1
 CARS_ID = 1
 BOOKINGS_ID = 1
