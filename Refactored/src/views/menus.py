@@ -5,7 +5,7 @@ from src.controllers.booking_controller import (create_booking, show_bookings,
     show_booking_by_id, update_booking, show_bookings_by_user, give_feedback)
 from src.controllers.report_controller import add_relatory, list_reports, list_user_reports, delete_relatory
 from src.controllers.customer_controller import add_customer, show_customers, find_customer, update_customer, delete_customer
-
+from src.controllers.gps_controller import show_map, show_car_map
 class Menu(ABC):
     """
     Classe abstrata base para todos os submenus do sistema.
@@ -147,6 +147,28 @@ class ReportMenu(Menu):
             return "exit"
         return None
 
+class GPSMenu(Menu):
+    def show_menu(self):
+        print("\n=== GPS Tracking Menu ===")
+        print("1. Show All Cars on Map")
+        print("2. Track Specific Car")
+        print("3. Exit")
+    
+    def process_choice(self, choice):
+        if choice == 1:
+            print("\nGenerating map with all cars...")
+            show_map()
+            print("\nMap opened in your browser.")
+        elif choice == 2:
+            show_cars()
+            car_id = int(input("\nEnter car ID to track: "))
+            print(f"\nGenerating map for car {car_id}...")
+            show_car_map(car_id)
+            print("\nMap opened in your browser.")
+        elif choice == 3:
+            return "exit"
+        return None
+
 submenu_classes = {
     1: CarMenu,
     2: CustomerMenu,
@@ -155,7 +177,7 @@ submenu_classes = {
     #5: "PaymentProcessingMenu", 
     #6: RentalAgreementMenu,
     7: PricingMenu,
-    #8: "CarTrackingMenu"
+    8: GPSMenu
 }
 
 class MainMenu:

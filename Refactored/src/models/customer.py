@@ -3,6 +3,12 @@ class CustomerBuilder:
         self.__name = None
         self.__wallet = None
         self.__email = None
+        self.__password = None
+        self.__id = None
+
+    def com_id(self, id):
+        self.__id = id
+        return self
 
     def com_name(self, name):
         self.__name = name
@@ -31,25 +37,19 @@ class CustomerBuilder:
         if self.__password is None:
             raise ValueError("Password cannot be None")
 
-        return Customer(self.__name, self.__wallet, self.__email, self.__password)
+        return Customer(self.__name, self.__wallet, self.__email, self.__password, self.__id)
 
 class Customer:
-    def __init__(self, name, email, wallet, password):
+    def __init__(self, name, email, wallet, password, id):
         self.__name = name
         self.__wallet = wallet
         self.__email = email
         self.__password = password  
-        self.__id = None # ID will be set later
+        self.__id = id # ID will be set later
     
     def __str__(self):
         return f"Customer: {self.name}, Email: {self.__email}, Wallet: {self.__wallet}"
     
-    def set_id(self, id):
-        if self.__id == None:
-            self.__id = id
-            return
-        else:
-            print("ID already set. Cannot change it.")
     @property
     def wallet(self):
         return self.__wallet

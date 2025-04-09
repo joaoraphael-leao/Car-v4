@@ -2,7 +2,7 @@ from src.controllers.car_controller import show_cars
 from src.controllers.customer_controller import login
 from src.controllers.booking_controller import show_bookings_by_user
 from src.models.reports import ReportBuilder, ServiceBuilder
-from global_dicts import reports
+from src.controllers.global_dicts import reports
 
 report_types = ["Maintenance", "Damage", "Service"]
 ## listar relatórios por usuário

@@ -6,7 +6,14 @@ class BookingBuilder:
         self.__start_date = None
         self.__end_date = None
         self.__cost = None
+        self.__longitude = None
+        self.__latitude = None
     
+    def com_location(self, longitude, latitude):
+        self.__longitude = longitude
+        self.__latitude = latitude
+        return self
+
     def com_id(self, id_passed):
         self.__id = id_passed
         return self
@@ -43,16 +50,21 @@ class BookingBuilder:
         if self.__cost is None:
             raise ValueError("Cost is required")
 
-        return Booking(self.__car_id, self.__customer_email, self.__start_date, self.__end_date, self.__cost, self.__id)
+        return Booking(self.__car_id, self.__customer_email, self.__start_date, self.__end_date, self.__cost, self.__id, self.__longitude, self.__latitude)
 
 class Booking:
-    def __init__(self, car_id, customer_email, start_date, end_date, cost, id_passed):
+    def __init__(self, car_id, customer_email, start_date, end_date, cost, id_passed, longitude, latitude):
+        self.__car_id = car_id
+        self.__customer_email = customer_email
+        self.__start_date = start_date
         self.__car_id = car_id
         self.__customer_email = customer_email
         self.__start_date = start_date
         self.__end_date = end_date
         self.__cost = cost
         self.__id= id_passed
+        self.__longitude = longitude
+        self.__latitude = latitude
     
     def __str__(self):
         return f"Booking ID: {self.__id}\n  Car ID: {self.__car_id}\nCustomer Email: {self.__customer_email}\nStart Date: {self.__start_date}\nEnd Date: {self.__end_date}\nCost: {self.__cost}"
@@ -61,6 +73,14 @@ class Booking:
         if self.__id is not None:
             raise ValueError("ID cannot be changed")
         self.__id = id
+
+    @property
+    def longitude(self):
+        return self.__longitude
+
+    @property
+    def latitude(self):
+        return self.__latitude
 
     @property
     def car_id(self):

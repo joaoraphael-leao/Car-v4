@@ -2,11 +2,11 @@ from src.controllers.global_dicts import customers, CUSTOMERS_ID
 from src.models.customer import CustomerBuilder
 
 def add_customer():
+    global CUSTOMERS_ID
     email = input("Enter email: ")
     if customers.get(email):
         print("A Customer with this email already exists.")
         return
-    customers[email] = {}
 
     Customer = CustomerBuilder()
     Customer.com_email(email)
@@ -17,12 +17,15 @@ def add_customer():
 
     password = input("Enter password: ")
     Customer.com_password(password)
-
-    Customer.build()
-    customers[email] = Customer
-    customers[email].set_id(CUSTOMERS_ID)
-    CUSTOMERS_ID += 1
-    print("Customer added successfully.")
+    Customer.com_id(CUSTOMERS_ID)
+    try:
+        Customer_final = Customer.build()
+        CUSTOMERS_ID += 1
+        customers[email] = Customer_final
+        print("Customer added successfully.")
+    except ValueError as e:
+        print(e)
+        return None
     return 
 
 # login
@@ -33,7 +36,8 @@ def login():
         print("Customer not found.")
         return None
     password = input("Enter password: ")
-    if customer.com_password != password:
+    if customer.password != password:
+        print(customer.password, " ", password)
         print("Incorrect password.")
         return None
     print("Login successful.")
@@ -50,7 +54,8 @@ def show_customers():
 def find_customer(email):
     customer = customers.get(email)
     if customer:
-        print(f"Customer found: {customer.com_name}, Wallet: {customer.com_wallet}")
+        print(f"Customer found: {customer.name}")
+        return customer
     else:
         print("Customer not found.")
 

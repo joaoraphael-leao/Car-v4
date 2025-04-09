@@ -5,14 +5,34 @@ from src.controllers.customer_controller import login
 from src.controllers.car_controller import show_available_cars
 from src.models.booking import BookingBuilder
 from src.utils.dates import validate_date
+from geopy.geocoders import Nominatim
+
+
+def get_coordinates_from_address(address):
+    """
+    Converte um endereço em coordenadas (latitude e longitude)
+    """
+    try:
+        geolocator = Nominatim(user_agent="car_rental_system")
+        location = geolocator.geocode(address)
+        
+        if location:
+            return location.latitude, location.longitude
+        else:
+            print("Não foi possível obter coordenadas para o endereço fornecido.")
+            return None, None
+    except Exception as e:
+        print(f"Erro ao obter coordenadas: {e}")
+        return None, None
 
 ## Create booking
 def create_booking():
     global BOOKINGS_ID
-    customer_email = login().email
+    customer = login()
+    customer_email = customer.email
     show_available_cars()
 
-    car_id = input("Enter car ID to book: ")
+    car_id = int(input("Enter car ID to book: "))
     car = cars.get(car_id)
     if not car:
         print("Car not found.")
@@ -20,7 +40,7 @@ def create_booking():
     start_date = input("Enter start date (YYYY-MM-DD): ")
     end_date = input("Enter end date (YYYY-MM-DD): ")
     validate_date(start_date, end_date)
-    ## calcular tempo em dias de reserva
+
     cost = calculate_booking_cost(car, start_date, end_date)
     booking = BookingBuilder()
     booking.com_car_id(car_id)
@@ -29,9 +49,19 @@ def create_booking():
     booking.com_end_date(end_date)
     booking.com_cost(cost)
     booking.com_id(BOOKINGS_ID)
-    booking.build()
 
-    bookings[BOOKINGS_ID] = booking
+    address = input("Enter pickup/dropoff address: ")
+    latitude, longitude = get_coordinates_from_address(address)
+
+    if latitude and longitude:
+        booking.com_location(longitude, latitude)
+        print(f"Localização definida: {latitude}, {longitude}")
+    else:
+        print("Aviso: Não foi possível definir coordenadas para este endereço.")
+
+    new_book = booking.build()
+
+    bookings[BOOKINGS_ID] = new_book
     BOOKINGS_ID += 1
     
 ## Show bookings
@@ -108,8 +138,17 @@ def update_booking():
 ## calculate booking cost
 def calculate_booking_cost(car, start_date, end_date):
     # Assuming cost is per day
+    from datetime import datetime
+    
+    # Convert string dates to datetime objects
+    if isinstance(start_date, str):
+        start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    if isinstance(end_date, str):
+        end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    
     days = (end_date - start_date).days
-    return days * car.cost_per_day
+    # Use daily_rate instead of cost_per_day to match the Car class property
+    return days * car.daily_rate
 
 def show_bookings_by_user(user_email):
     user_bookings = [booking for booking in bookings if booking.customer_email == user_email]
