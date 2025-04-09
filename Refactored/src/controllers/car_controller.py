@@ -1,7 +1,8 @@
-from models.car import CarBuilder
-from global_dicts import cars
+from src.models.car import CarBuilder
+from src.controllers.global_dicts import cars, CARS_ID
 
-def add_car(global_car__id):
+def add_car():
+    global CARS_ID
     car = CarBuilder()
     brand = input("What is the car's brand? ")
     car.com_brand(brand)
@@ -22,16 +23,23 @@ def add_car(global_car__id):
     is_available = True if is_available == "y" else False
     car.com_availability(is_available)
 
+    car.com_id(CARS_ID)
+    print(car,"\nid: ", CARS_ID)
     try:
-        car = car.builder()
-        car.set_id(global_car_id)   
-        cars[global_car_id] = car
+        built_car = car.builder()
+        cars[CARS_ID] = built_car
         print("Car added successfully")
+        CARS_ID += 1
     except ValueError as e:
         print(e)
         return
     
 def correct_car_data(car_id):
+    
+    if car_id not in cars: 
+        print("Car not found")
+        return
+        
     print("What do you want to change?")
     print("1. Brand")
     print("2. Model")
@@ -61,8 +69,13 @@ def correct_car_data(car_id):
         return
     
 def show_cars():
+    print("==========================")
+    print("===== All registered cars =====")
     for car in cars.values():
         print(car)
+        print("==========================")
+    print("==========================")
+
 
 def show_available_cars():
     for car in cars.values():

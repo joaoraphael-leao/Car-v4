@@ -1,19 +1,14 @@
 from typing import override
 
 class Car:
-    def __init__(self, model, brand, year, license_plate, daily_rate, is_available=True):
-        self.__id = None
+    def __init__(self, id_passed, model, brand, year, license_plate, daily_rate, is_available=True):
+        self.__id = id_passed
         self.__model = model
         self.__brand = brand
         self.__year = year
         self.__license_plate = license_plate
         self.__daily_rate = daily_rate
         self.__is_available = is_available
-    
-    def set_id(self, id):
-        if self.__id is not None:
-            raise ValueError("ID cannot be changed")
-        self.__id = id
 
     @property
     def id(self):
@@ -106,8 +101,8 @@ class CarBuilder:
         self.daily_rate = None
         self.is_available = True
     
-    def com_id(self, id):
-        self.id = id
+    def com_id(self, id_passed):
+        self.id = id_passed
         return self
     
     def com_model(self, model):
@@ -134,9 +129,10 @@ class CarBuilder:
         self.is_available = is_available
         return self
     
+    def __str__(self):
+        return f"ID: {self.id}\nModel: {self.model}\nBrand: {self.brand}\nYear: {self.year}\nLicense Plate: {self.license_plate}\nDaily Rate: R${self.daily_rate}/day\nAvailable: {self.is_available}"
+
     def builder(self):
-        if not self.id:
-            raise ValueError("ID is required")
         if not self.model:
             raise ValueError("Model is required")
         if not self.brand:
@@ -147,6 +143,8 @@ class CarBuilder:
             raise ValueError("License plate is required")
         if not self.daily_rate:
             raise ValueError("Daily rate is required")
+        if not self.id:
+            raise ValueError("ID is required")
         
         return Car(self.id, self.model, self.brand, self.year, 
                   self.license_plate, self.daily_rate, self.is_available)

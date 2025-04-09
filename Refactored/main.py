@@ -1,3 +1,5 @@
-from src.controllers.customer_controller import add_customer
+from src.views.menus import MainMenu
 
-add_customer()
+if __name__ == "__main__":
+    menu = MainMenu()
+    menu.execute()
