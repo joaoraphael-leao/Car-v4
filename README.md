@@ -30,7 +30,6 @@
 • Customer Feedback and Reviews: Collecting and managing customer feedback on rentals.
 - Implemented
 
-  main.py is not functional.
 
 Added the following concepts to the project:
 
