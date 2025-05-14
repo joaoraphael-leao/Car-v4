@@ -132,7 +132,7 @@ class CarBuilder:
     def __str__(self):
         return f"ID: {self.id}\nModel: {self.model}\nBrand: {self.brand}\nYear: {self.year}\nLicense Plate: {self.license_plate}\nDaily Rate: R${self.daily_rate}/day\nAvailable: {self.is_available}"
 
-    def builder(self):
+    def build(self):
         if not self.model:
             raise ValueError("Model is required")
         if not self.brand:

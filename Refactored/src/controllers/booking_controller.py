@@ -95,7 +95,7 @@ def create_booking():
     end_date = convert_date_format(end_date)
 
     try:
-        validate_date(self.__start_date, self.__end_date)
+        validate_date(start_date, end_date)
     except ValueError as e:
         print(e)
         return None
@@ -131,7 +131,8 @@ def create_booking():
         bookings[BOOKINGS_ID] = new_book
         BOOKINGS_ID += 1
         print(f"Reserva criada com sucesso! ID: {BOOKINGS_ID-1}")
-        customers[customer_email].add_debts(cost)
+        print(new_book)
+        customer.add_debts(cost)
         return new_book
     except ValueError as e:
         print(e)
@@ -148,7 +149,7 @@ def get_booking(booking_id):
     return booking
 
 def show_booking_by_id():
-    booking_id = input("Enter booking ID: ")
+    booking_id = int(input("Enter booking ID: "))
     try:
         booking = get_booking(booking_id)
         print(booking)

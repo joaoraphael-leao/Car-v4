@@ -1,4 +1,5 @@
-from src.controllers import car_controller, customer_controller, pricing_controller, booking_controller, report_controller, gps_controller
+from src.controllers import car_controller, customer_controller, pricing_controller, booking_controller, report_controller, gps_controller, payment_controller
+from src.controllers.customer_controller import login
 
 #Car Facade
 class CarFacade:
@@ -137,3 +138,32 @@ class GPSFacade:
         print("\nGenerating map with all cars...")
         self.controller.show_map()
         print("\nMap opened in your browser.")
+
+#Payment Facade
+class PaymentFacade:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.controller = payment_controller
+        return cls._instance
+
+    def add_funds(self):
+        customer = login()
+        if not customer:
+            return False
+        amount = float(input("Digite o valor a ser adicionado: "))
+        self.controller.add_funds(email=customer.email, amount=amount)
+    
+    def check_balance(self):
+        customer = login()
+        if not customer:
+            return False
+        self.controller.check_balance(customer.email)
+    
+    def pay_debts(self):
+        customer = login()
+        if not customer:
+            return False
+        self.controller.pay_debts(customer.email)

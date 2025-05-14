@@ -1,2 +1,4 @@
 [0410/113904.356:ERROR:crashpad_client_win.cc(811)] not connected
 [0410/113904.503:ERROR:crashpad_client_win.cc(811)] not connected
+[0514/143306.262:ERROR:third_party\crashpad\crashpad\client\crashpad_client_win.cc:811] not connected
+[0514/143607.433:ERROR:third_party\crashpad\crashpad\client\crashpad_client_win.cc:811] not connected

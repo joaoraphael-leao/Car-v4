@@ -48,7 +48,7 @@ class BookingBuilder:
             raise ValueError("Customer ID is required")
         if self.__customer_email not in customers:
             raise ValueError("Customer not found")
-        if customers[customer_email].has_debts():
+        if customers[self.__customer_email].has_debts():
             raise ValueError("Customer has debts")
         if self.__start_date is None:
             raise ValueError("Start date is required")
@@ -66,9 +66,6 @@ class Booking:
         self.__car_id = car_id
         self.__customer_email = customer_email
         self.__start_date = start_date
-        self.__car_id = car_id
-        self.__customer_email = customer_email
-        self.__start_date = start_date
         self.__end_date = end_date
         self.__cost = cost
         self.__id= id_passed
@@ -76,7 +73,7 @@ class Booking:
         self.__latitude = latitude
     
     def __str__(self):
-        return f"Booking ID: {self.__id}\n  Car ID: {self.__car_id}\nCustomer Email: {self.__customer_email}\nStart Date: {self.__start_date}\nEnd Date: {self.__end_date}\nCost: {self.__cost}"
+        return f"Booking ID: {self.__id}\nCar ID: {self.__car_id}\nCustomer Email: {self.__customer_email}\nStart Date: {self.__start_date}\nEnd Date: {self.__end_date}\nCost: {self.__cost}"
 
     def set_id(self, id):
         if self.__id is not None:
@@ -115,6 +112,3 @@ class Booking:
     def end_date(self):
         return self.__end_date
     
-    @property
-    def customer_id(self):
-        return self.__customer_id
