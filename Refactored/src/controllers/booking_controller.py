@@ -100,7 +100,6 @@ def create_booking():
         print(e)
         return None
     
-    
     # Mostrar apenas carros disponíveis nesse período
     from src.controllers.car_controller import show_cars_available_by_date
     available_cars = show_cars_available_by_date(start_date, end_date)
@@ -132,6 +131,31 @@ def create_booking():
         BOOKINGS_ID += 1
         print(f"Reserva criada com sucesso! ID: {BOOKINGS_ID-1}")
         print(new_book)
+        
+        # Adicionando o Rental Agreement simplificado
+        rental_agreement = {
+            "CONTRATO DE ALUGUEL": {
+                "ID da Reserva": BOOKINGS_ID-1,
+                "Cliente": customer_email,
+                "Carro ID": car_id,
+                "Modelo": car.model,
+                "Placa": car.license_plate,
+                "Data Início": start_date,
+                "Data Fim": end_date,
+                "Custo Total": f"R${cost:.2f}",
+                "Local de Retirada": address,
+                "Termos": [
+                    "1. Cliente responsável por danos",
+                    "2. Devolução na data acordada",
+                    "3. Multas por conta do cliente",
+                    "4. Seguro básico incluído",
+                    "5. Devolver com tanque cheio"
+                ]
+            }
+        }
+        
+        print("\n=== RENTAL AGREEMENT ===")
+        print(rental_agreement)
         customer.add_debts(cost)
         return new_book
     except ValueError as e:
