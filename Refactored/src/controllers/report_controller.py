@@ -1,4 +1,3 @@
-from src.controllers.car_controller import show_cars
 from src.controllers.customer_controller import login
 from src.controllers.booking_controller import show_bookings_by_user
 from src.models.reports import ReportBuilder, ServiceBuilder
@@ -6,7 +5,8 @@ from src.controllers.global_dicts import reports
 
 report_types = ["Maintenance", "Damage", "Service"]
 ## listar relatórios por usuário
-def list_user_reports(email):
+def list_user_reports():
+    email = input("Enter your email: ")
     for report in reports:
         if report.report_user == email:
             print(report)
@@ -23,17 +23,17 @@ def add_relatory():
     customer = login().email
     show_bookings_by_user(customer)
 
-    book = input("Escolha a reserva no qual você tem um relatório a fazer: ")
-    if book_id not in bookings:  # Corrigido a verificação
+    book_id = input("Escolha a reserva no qual você tem um relatório a fazer: ")
+
+    booking = bookings.get(book_id)
+    if booking is None:
         print("Reserva não encontrada.")
         return None
-    
-    booking = bookings[book_id]
-
     if booking.customer_email != customer:
         print("Essa reserva não pertence a você.")
         return None
     
+    ## TRANSFORMAR EM CLASSE DE SUBMENU
     print("Reserva encontrada.")
     print("Escolha o que quer relatar")
     print("1 - Maintenance 🛠️")

@@ -1,6 +1,71 @@
 from src.models.car import CarBuilder
 from src.controllers.global_dicts import cars, CARS_ID
 
+
+def show_cars_available_by_date(start_date, end_date):
+    """
+    Mostra os carros disponíveis em um intervalo de datas específico
+    
+    Args:
+        start_date (str): Data de início no formato YYYY-MM-DD
+        end_date (str): Data de fim no formato YYYY-MM-DD
+        
+    Returns:
+        list: Lista de carros disponíveis no período
+    """
+    from datetime import datetime
+    from src.controllers.global_dicts import cars, bookings
+    from src.utils.dates import validate_date
+    
+    # Validar as datas
+    validate_date(start_date, end_date)
+    
+    # Converter para objetos datetime
+    if isinstance(start_date, str):
+        start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+    if isinstance(end_date, str):
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+    
+    available_cars = []
+    
+    for car_id, car in cars.items():
+        # Verificar se o carro está marcado como disponível
+        if not car.is_available:
+            continue
+        
+        # Verificar se o carro tem reservas que se sobrepõem ao período solicitado
+        is_booked = False
+        for booking_id, booking in bookings.items():
+            if booking.car_id != car_id:
+                continue
+                
+            # Converter datas da reserva
+            booking_start = booking.start_date
+            booking_end = booking.end_date
+            
+            if isinstance(booking_start, str):
+                booking_start = datetime.strptime(booking_start, "%Y-%m-%d").date()
+            if isinstance(booking_end, str):
+                booking_end = datetime.strptime(booking_end, "%Y-%m-%d").date()
+            
+            # Verificar sobreposição de datas
+            if (start_date <= booking_end and end_date >= booking_start):
+                is_booked = True
+                break
+        
+        if not is_booked:
+            available_cars.append(car)
+    
+    if not available_cars:
+        print(f"Não há carros disponíveis no período de {start_date} a {end_date}.")
+    else:
+        print(f"\nCarros disponíveis no período de {start_date} a {end_date}:")
+        for car in available_cars:
+            print(car)
+            print("-" * 30)
+    
+    return available_cars
+    
 def add_car():
     global CARS_ID
     car = CarBuilder()

@@ -1,7 +1,7 @@
 import folium
 import webbrowser
 import os
-import datetime
+from src.controllers.booking_controller import is_booking_active
 from src.controllers.global_dicts import bookings, cars
 
 def generate_map(filename="car_tracking_map.html"):
@@ -38,6 +38,20 @@ def generate_map(filename="car_tracking_map.html"):
             <b>Marca:</b> {car.brand}<br>
             <b>Modelo:</b> {car.model}<br>
             """
+            
+        # Configurar o ícone personalizado
+        icon_path = os.path.abspath('src/utils/guru.png')
+        try:
+            icon = folium.features.CustomIcon(
+                    icon_image=icon_path,
+                    icon_size=(30, 30),
+                    icon_anchor=(15, 15),
+                    popup_anchor=(0, -15)
+                )
+           
+        except Exception as e:
+            print(f"Erro ao carregar ícone personalizado: {e}")
+            icon = folium.Icon(color=marker_color, icon='car', prefix='fa')
         
         # Adicionar marcador para a reserva
         popup_text = f"""
@@ -53,7 +67,7 @@ def generate_map(filename="car_tracking_map.html"):
         folium.Marker(
             [booking.latitude, booking.longitude],
             popup=folium.Popup(popup_text, max_width=300),
-            icon=folium.Icon(color=marker_color, icon='car', prefix='fa')
+            icon=icon
         ).add_to(map)
     
     # Salvar o mapa
@@ -111,10 +125,25 @@ def generate_car_map(car_id, filename="car_map.html"):
         {car_info}
         """
         
+        # Na função generate_car_map, substitua o trecho do marcador por:
+        
+        # Configurar o ícone personalizado
+        icon_path = os.path.abspath('src/utils/guru.png')
+        try:
+            icon = folium.features.CustomIcon(
+                icon_image=icon_path,
+                icon_size=(30, 30),
+                icon_anchor=(15, 15),
+                popup_anchor=(0, -15)
+            )
+        except Exception as e:
+            print(f"Erro ao carregar ícone personalizado: {e}")
+            icon = folium.Icon(color='red', icon='car', prefix='fa')
+            
         folium.Marker(
             [booking.latitude, booking.longitude],
             popup=folium.Popup(popup_text, max_width=300),
-            icon=folium.Icon(color=marker_color, icon='car', prefix='fa')
+            icon=icon
         ).add_to(map)
     
     # Salvar o mapa
@@ -124,10 +153,14 @@ def generate_car_map(car_id, filename="car_map.html"):
     print(f"Mapa do carro {car_id} salvo em: {map_path}")
     return map_path
 
-def show_car_map(car_id):
+def show_car_map():
     """
     Gera e abre o mapa de um carro específico no navegador padrão
     """
+
+    car_id = int(input("\nEnter car ID to track: "))
+    print(f"\nGenerating map for car {car_id}...")
     map_path = generate_car_map(car_id)
     if map_path:
         webbrowser.open('file://' + os.path.realpath(map_path))
+        print("\nMap opened in your browser.")

@@ -4,9 +4,6 @@ from src.models.customer import CustomerBuilder
 def add_customer():
     global CUSTOMERS_ID
     email = input("Enter email: ")
-    if customers.get(email):
-        print("A Customer with this email already exists.")
-        return
 
     Customer = CustomerBuilder()
     Customer.com_email(email)
@@ -90,3 +87,5 @@ def delete_customer(email):
     if authenticated == customer:
         del customers[email]
         print("Customer deleted successfully.")
+
+

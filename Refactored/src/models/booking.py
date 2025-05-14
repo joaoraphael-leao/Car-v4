@@ -1,3 +1,5 @@
+from src.controllers.global_dicts import customers
+
 class BookingBuilder:
     def __init__(self):
         self.__id = None
@@ -9,9 +11,10 @@ class BookingBuilder:
         self.__longitude = None
         self.__latitude = None
     
-    def com_location(self, longitude, latitude):
+    def com_location(self, latitude, longitude):
         self.__longitude = longitude
         self.__latitude = latitude
+        print(f"Localização definida: {latitude}, {longitude}")
         return self
 
     def com_id(self, id_passed):
@@ -43,12 +46,18 @@ class BookingBuilder:
             raise ValueError("Car ID is required")
         if self.__customer_email is None:
             raise ValueError("Customer ID is required")
+        if self.__customer_email not in customers:
+            raise ValueError("Customer not found")
+        if customers[customer_email].has_debts():
+            raise ValueError("Customer has debts")
         if self.__start_date is None:
             raise ValueError("Start date is required")
         if self.__end_date is None:
             raise ValueError("End date is required")
         if self.__cost is None:
             raise ValueError("Cost is required")
+        if not self.__longitude or not self.__latitude:
+            raise ValueError("Erro: No coordinates book with that location")
 
         return Booking(self.__car_id, self.__customer_email, self.__start_date, self.__end_date, self.__cost, self.__id, self.__longitude, self.__latitude)
 
