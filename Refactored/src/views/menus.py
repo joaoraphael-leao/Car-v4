@@ -1,15 +1,18 @@
 from abc import ABC, abstractmethod
-from src.controllers.car_controller import add_car, show_cars, show_available_cars, correct_car_data
-from src.controllers.pricing_controller import update_car_price, add_special_offer, show_special_offers
-from src.controllers.booking_controller import (create_booking, show_bookings, 
-    show_booking_by_id, update_booking, show_bookings_by_user, give_feedback)
-from src.controllers.report_controller import add_relatory, list_reports, list_user_reports, delete_relatory
-from src.controllers.customer_controller import add_customer, show_customers, find_customer, update_customer, delete_customer
-from src.controllers.gps_controller import show_map, show_car_map
+from src.views.facade import CarFacade, CustomerFacade, BookingFacade, ReportFacade, PricingFacade, GPSFacade, ReportFacade
 class Menu(ABC):
     """
     Classe abstrata base para todos os submenus do sistema.
     """
+    ## Template Method, execute_menu sendo um orquestrador da lógica
+    def execute_menu(self):  # Método template
+        while True:
+            self.show_menu()  # Hotspot
+            choice = self.get_user_input()  # Hook
+            result = self.process_choice(choice)  # Hotspot
+            if result == "exit":
+                break
+    
     @abstractmethod
     def show_menu(self):
         raise NotImplementedError
@@ -17,8 +20,10 @@ class Menu(ABC):
     @abstractmethod
     def process_choice(self, choice):
         raise NotImplementedError
+    
+    def get_user_input(self):  # Hook method
+        return int(input("Digite sua escolha: "))
 class CarMenu(Menu):
-
     def show_menu(self):
         print("Car Management Menu")
         print("1. Add Car")
@@ -29,16 +34,15 @@ class CarMenu(Menu):
         return
     
     def process_choice(self, choice):
+        facade = CarFacade()
         if choice == 1:
-            add_car()
+            facade.add_car()
         elif choice == 2:
-            show_cars()
+            facade.show_cars() 
         elif choice == 3:
-            show_available_cars()
+            facade.show_available_cars()
         elif choice == 4:
-            show_cars()
-            car_id = int(input("Enter the ID of the car you want to update: "))
-            correct_car_data(car_id)
+            facade.update_car()
         elif choice == 5:
             return "exit"
         return None
@@ -54,40 +58,38 @@ class CustomerMenu(Menu):
         print("6. Exit")
     
     def process_choice(self, choice):
+        facade = CustomerFacade()
         if choice == 1:
-            add_customer()
+            facade.add_customer()
         elif choice == 2:
-            show_customers()
+            facade.show_customers()
         elif choice == 3:
-            email = input("Enter customer email: ")
-            find_customer(email)
+            facade.find_customer()
         elif choice == 4:
-            update_customer()
+            facade.update_customer()
         elif choice == 5:
-            email = input("Enter customer email to delete: ")
-            delete_customer(email)
+            facade.delete_customer()
         elif choice == 6:
             return "exit"
         return None
 
 
 class PricingMenu(Menu):
-    def display(self):
+    def show_menu(self):
         print("\n=== Gerenciamento de Preços e Ofertas ===")
         print("1. Atualizar Preço Base")
         print("2. Adicionar Oferta Especial")
         print("3. Visualizar Ofertas Especiais")
         print("4. Voltar")
         
-    def process_choice(self):
-        choice = input("Escolha uma opção: ")
-            
+    def process_choice(self, choice):
+        facade = PricingFacade()
         if choice == "1":
-            update_car_price()
+            facade.update_car_price()
         elif choice == "2":
-            add_special_offer()
+            facade.add_special_offer()
         elif choice == "3":
-            show_special_offers()
+            facade.show_special_offers()
         elif choice == "4":
             return "exit"
         else:
@@ -106,20 +108,19 @@ class BookingMenu(Menu):
         print("7. Exit")
     
     def process_choice(self, choice):
+        facade = BookingFacade()
         if choice == 1:
-            create_booking()
+            facade.create_booking()
         elif choice == 2:
-            show_bookings()
+            facade.show_bookings()
         elif choice == 3:
-            booking_id = input("Enter booking ID: ")
-            show_booking_by_id(booking_id)
+            facade.show_booking_by_id()
         elif choice == 4:
-            update_booking()
+            facade.update_booking()
         elif choice == 5:
-            email = input("Enter your email: ")
-            show_bookings_by_user(email)
+            facade.show_bookings_by_user()
         elif choice == 6:
-            give_feedback()
+            facade.give_feedback()
         elif choice == 7:
             return "exit"
         return None
@@ -134,15 +135,15 @@ class ReportMenu(Menu):
         print("5. Exit")
     
     def process_choice(self, choice):
+        facade = ReportFacade()
         if choice == 1:
-            add_relatory()
+            facade.add_relatory()
         elif choice == 2:
-            list_reports()
+            facade.list_reports()
         elif choice == 3:
-            email = input("Enter your email: ")
-            list_user_reports(email)
+            facade.list_user_reports()
         elif choice == 4:
-            delete_relatory()
+            facade.delete_relatory()
         elif choice == 5:
             return "exit"
         return None
@@ -151,21 +152,13 @@ class GPSMenu(Menu):
     def show_menu(self):
         print("\n=== GPS Tracking Menu ===")
         print("1. Show All Cars on Map")
-        print("2. Track Specific Car")
-        print("3. Exit")
+        print("2. Exit")
     
     def process_choice(self, choice):
+        facade = GPSFacade()
         if choice == 1:
-            print("\nGenerating map with all cars...")
-            show_map()
-            print("\nMap opened in your browser.")
+            facade.show_map()
         elif choice == 2:
-            show_cars()
-            car_id = int(input("\nEnter car ID to track: "))
-            print(f"\nGenerating map for car {car_id}...")
-            show_car_map(car_id)
-            print("\nMap opened in your browser.")
-        elif choice == 3:
             return "exit"
         return None
 
@@ -249,8 +242,6 @@ class MainMenu:
             choice (int): A opção escolhida pelo usuário
         """
         submenu = submenu_classes[choice]()
-        submenu.show_menu()
-        choice = int(input("Enter your choice: "))
-        submenu.process_choice(choice)
+        submenu.execute_menu()
 
 

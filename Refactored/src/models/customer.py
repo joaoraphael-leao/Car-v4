@@ -1,3 +1,5 @@
+from src.controllers.global_dicts import customers
+
 class CustomerBuilder:
     def __init__(self):
         self.__name = None
@@ -27,6 +29,8 @@ class CustomerBuilder:
         return self
     
     def build(self):
+        if customers.get(self.__email):
+            raise ValueError("Email already in use")
         if self.__name is None:
             raise ValueError("Name cannot be None")
         if self.__wallet is None:
@@ -37,7 +41,7 @@ class CustomerBuilder:
         if self.__password is None:
             raise ValueError("Password cannot be None")
 
-        return Customer(self.__name, self.__wallet, self.__email, self.__password, self.__id)
+        return Customer(self.__name, self.__email, self.__wallet, self.__password, self.__id)
 
 class Customer:
     def __init__(self, name, email, wallet, password, id):
@@ -45,7 +49,8 @@ class Customer:
         self.__wallet = wallet
         self.__email = email
         self.__password = password  
-        self.__id = id # ID will be set later
+        self.__id = id
+        self.__debts = 0
     
     def __str__(self):
         return f"Customer: {self.name}, Email: {self.__email}, Wallet: {self.__wallet}"
@@ -73,7 +78,6 @@ class Customer:
     def name(self, name):
         self.__name = name
 
-
     @property
     def password(self):
         return self.__password
@@ -82,4 +86,8 @@ class Customer:
     def password(self, password):
         self.__password = password
     
+    def add_debts(self, amount):
+        self.__debts += amount
 
+    def has_debts(self):
+        return self.__debts > 0

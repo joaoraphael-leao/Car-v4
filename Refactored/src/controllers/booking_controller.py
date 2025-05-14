@@ -1,3 +1,4 @@
+from nt import error
 from src.controllers.global_dicts import bookings, BOOKINGS_ID, feedbacks
 from src.controllers.global_dicts import cars
 from src.controllers.global_dicts import customers
@@ -7,6 +8,37 @@ from src.models.booking import BookingBuilder
 from src.utils.dates import validate_date
 from geopy.geocoders import Nominatim
 
+def is_booking_active(booking):
+    """
+    Verifica se uma reserva está ativa no momento atual
+    
+    Args:
+        booking: Objeto de reserva a ser verificado
+        
+    Returns:
+        bool: True se a reserva estiver ativa, False caso contrário
+    """
+    from datetime import datetime
+    
+    today = datetime.now().date()
+    
+    if isinstance(booking.start_date, str):
+        try:
+            start_date = datetime.strptime(booking.start_date, "%Y-%m-%d").date()
+        except ValueError:
+            start_date = datetime.strptime(booking.start_date, "%d-%m-%Y").date()
+    else:
+        start_date = booking.start_date
+        
+    if isinstance(booking.end_date, str):
+        try:
+            end_date = datetime.strptime(booking.end_date, "%Y-%m-%d").date()
+        except ValueError:
+            end_date = datetime.strptime(booking.end_date, "%d-%m-%Y").date()
+    else:
+        end_date = booking.end_date
+    
+    return start_date <= today <= end_date
 
 def get_coordinates_from_address(address):
     """
@@ -25,22 +57,61 @@ def get_coordinates_from_address(address):
         print(f"Erro ao obter coordenadas: {e}")
         return None, None
 
-## Create booking
+def convert_date_format(date_str):
+    """
+    Converte a data para o formato YYYY-MM-DD independente do formato de entrada
+    Aceita DD-MM-YYYY ou YYYY-MM-DD
+    """
+    from datetime import datetime
+    
+    # Tenta primeiro o formato YYYY-MM-DD
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+        return date_str  # Já está no formato correto
+    except ValueError:
+        pass
+    
+    # Tenta o formato DD-MM-YYYY
+    try:
+        date_obj = datetime.strptime(date_str, "%d-%m-%Y")
+        return date_obj.strftime("%Y-%m-%d")  # Converte para YYYY-MM-DD
+    except ValueError:
+        # Se nenhum formato funcionar, orienta o usuário
+        print(f"Formato de data inválido: {date_str}. Use DD-MM-YYYY ou YYYY-MM-DD")
+        return date_str  # Retorna a string original para que o erro seja tratado posteriormente
+
 def create_booking():
     global BOOKINGS_ID
     customer = login()
+    
     customer_email = customer.email
-    show_available_cars()
+    
+    print("Enter dates in format YYYY-MM-DD or DD-MM-YYYY")
+    start_date = input("Enter start date: ")
+    end_date = input("Enter end date: ")
+    
+    # Converter para formato YYYY-MM-DD se necessário
+    start_date = convert_date_format(start_date)
+    end_date = convert_date_format(end_date)
 
+    try:
+        validate_date(self.__start_date, self.__end_date)
+    except ValueError as e:
+        print(e)
+        return None
+    
+    
+    # Mostrar apenas carros disponíveis nesse período
+    from src.controllers.car_controller import show_cars_available_by_date
+    available_cars = show_cars_available_by_date(start_date, end_date)
+    
+    if not available_cars:
+        return None
+    
     car_id = int(input("Enter car ID to book: "))
     car = cars.get(car_id)
-    if not car:
-        print("Car not found.")
-        return None
-    start_date = input("Enter start date (YYYY-MM-DD): ")
-    end_date = input("Enter end date (YYYY-MM-DD): ")
-    validate_date(start_date, end_date)
-
+    
+    # Continuar com o processo de reserva usando o builder
     cost = calculate_booking_cost(car, start_date, end_date)
     booking = BookingBuilder()
     booking.com_car_id(car_id)
@@ -53,42 +124,50 @@ def create_booking():
     address = input("Enter pickup/dropoff address: ")
     latitude, longitude = get_coordinates_from_address(address)
 
-    if latitude and longitude:
-        booking.com_location(longitude, latitude)
-        print(f"Localização definida: {latitude}, {longitude}")
-    else:
-        print("Aviso: Não foi possível definir coordenadas para este endereço.")
+    booking.com_location(latitude, longitude)
 
-    new_book = booking.build()
+    try:
+        new_book = booking.build()
+        bookings[BOOKINGS_ID] = new_book
+        BOOKINGS_ID += 1
+        print(f"Reserva criada com sucesso! ID: {BOOKINGS_ID-1}")
+        customers[customer_email].add_debts(cost)
+        return new_book
+    except ValueError as e:
+        print(e)
+        return None
 
-    bookings[BOOKINGS_ID] = new_book
-    BOOKINGS_ID += 1
-    
-## Show bookings
 def show_bookings():
     for booking in bookings:
         print(booking)
 
-## Show booking by ID
-def show_booking_by_id(booking_id):
+def get_booking(booking_id):
     booking = bookings.get(booking_id)
     if not booking:
-        print("Booking not found.")
-        return None
-    print(booking)
+        raise error("Booking not found.")
+    return booking
 
-## Updates
+def show_booking_by_id():
+    booking_id = input("Enter booking ID: ")
+    try:
+        booking = get_booking(booking_id)
+        print(booking)
+    except ValueError as error:
+        print(error)
+        return None
 
 ## Update Booking
 def update_booking():
     show_bookings()
     booking_id = input("Enter booking ID to update: ")
-    booking = bookings.get(booking_id)
-    if not booking:
-        print("Booking not found.")
+    try:
+        booking = get_booking(booking_id)
+    except ValueError as error:
+        print(error)
         return None
-    customer_email = login().email
-    if customer_email != booking.customer_email:
+    
+    customer = login()
+    if customer.email != booking.customer_email:
         print("You are not authorized to update this booking.")
         return None
 
@@ -97,39 +176,42 @@ def update_booking():
     print("3. Update car")
 
     option = input("Select an option: ")
-    if option == "1":
-        new_start_date = input("Enter new start date (YYYY-MM-DD): ")
-        try:
-            validate_date(new_start_date, booking.end_date)
-        except ValueError as e:
-            print(e)
+    
+    match option:
+        case "1":
+            new_start_date = input("Enter new start date (YYYY-MM-DD): ")
+            try:
+                validate_date(new_start_date, booking.end_date)
+                booking.start_date = new_start_date
+            except ValueError as e:
+                print(e)
+                return None
+        case "2":
+            new_end_date = input("Enter new end date (YYYY-MM-DD): ")
+            try:
+                validate_date(booking.start_date, new_end_date)
+                booking.end_date = new_end_date
+            except ValueError as e:
+                print(e)
+                return None
+        case "3":
+            show_available_cars()
+            car_id = input("Enter new car ID: ")
+            if car_id == booking.car_id:
+                print("You have selected the same car.")
+                return None
+            car = cars.get(car_id)
+            if not car:
+                print("Car not found.")
+                return None
+            
+            booking.car_id = car_id
+        case _:
+            print("Invalid option.")
             return None
 
-        booking.start_date = new_start_date
-    elif option == "2":
-        
-        new_end_date = input("Enter new end date (YYYY-MM-DD): ")
-        try:
-            validate_date(booking.start_date, new_end_date)
-        except ValueError as e:
-            print(e)
-            return None
-        booking.end_date = new_end_date
-    elif option == "3":
-        show_available_cars()
-        car_id = input("Enter new car ID: ")
-        if car_id == booking.car_id:
-            print("You have selected the same car.")
-            return None
-        car = cars.get(car_id)
-        if not car:
-            print("Car not found.")
-            return None
+    print("Booking updated successfully.")
 
-        booking.car_id = car_id
-    else:
-        print("Invalid option.")
-        return None
     
 ## Cancel Booking
 
@@ -137,7 +219,6 @@ def update_booking():
 
 ## calculate booking cost
 def calculate_booking_cost(car, start_date, end_date):
-    # Assuming cost is per day
     from datetime import datetime
     
     # Convert string dates to datetime objects
@@ -147,10 +228,10 @@ def calculate_booking_cost(car, start_date, end_date):
         end_date = datetime.strptime(end_date, "%Y-%m-%d")
     
     days = (end_date - start_date).days
-    # Use daily_rate instead of cost_per_day to match the Car class property
     return days * car.daily_rate
 
-def show_bookings_by_user(user_email):
+def show_bookings_by_user():
+    email = input("Enter your email: ")
     user_bookings = [booking for booking in bookings if booking.customer_email == user_email]
     if not user_bookings:
         print("No bookings found for this user.")
@@ -159,12 +240,11 @@ def show_bookings_by_user(user_email):
         print(booking)
 
 def give_feedback():
-    email = input("Enter your email: ")
-    password = input("Enter your password: ")
-    if email not in customers or customers[email].password != password:
-        print("Invalid email or password.")
+    user = login()
+    if not user:
         return None
-    show_bookings_by_user(email)
+        
+    show_bookings_by_user(user.email)
     booking_id = input("Enter booking ID to give feedback: ")
     booking = bookings.get(booking_id)
     if not booking:

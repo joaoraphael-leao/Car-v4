@@ -1,5 +1,5 @@
 from typing import override
-
+from src.controllers.global_dicts import bookings
 class ReportBuilder:
     def __init__(self):
         self.car_id = None
@@ -11,7 +11,7 @@ class ReportBuilder:
     def com_report_user(self, report_user):
         self.report_user = report_user
         return self
- 
+
     def com_car_id(self, car_id):
         self.car_id = car_id
         return self
