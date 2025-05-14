@@ -46,7 +46,8 @@ def show_customers():
         return
 
     for email, customer in customers.items():
-        print(f"Email: {email}, Name: {customer.com_name}, Wallet: {customer.com_wallet}")
+        print(f"Email: {email}\nName: {customer.name}\nWallet: {customer.wallet}")
+        print("==================================================================")
 
 def find_customer(email):
     customer = customers.get(email)
@@ -66,7 +67,7 @@ def update_customer():
     choice = input("Enter your choice: ")
     if choice == '1':
         new_name = input("Enter new name: ")
-        customer.name == new_name
+        customer.name = new_name
         print("Name updated successfully.")
     elif choice == '2':
         amount = float(input("Enter amount to add: "))

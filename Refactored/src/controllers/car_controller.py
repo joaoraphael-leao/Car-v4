@@ -91,7 +91,7 @@ def add_car():
     car.com_id(CARS_ID)
     print(car,"\nid: ", CARS_ID)
     try:
-        built_car = car.builder()
+        built_car = car.build()
         cars[CARS_ID] = built_car
         print("Car added successfully")
         CARS_ID += 1

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.views.facade import CarFacade, CustomerFacade, BookingFacade, ReportFacade, PricingFacade, GPSFacade, ReportFacade
+from src.views.facade import CarFacade, CustomerFacade, BookingFacade, ReportFacade, PricingFacade, GPSFacade, PaymentFacade
 class Menu(ABC):
     """
     Classe abstrata base para todos os submenus do sistema.
@@ -162,12 +162,32 @@ class GPSMenu(Menu):
             return "exit"
         return None
 
+class PaymentMenu(Menu):
+    def show_menu(self):
+        print("\n=== Payment Processing Menu ===")
+        print("1. Add Funds")
+        print("2. Check Balance")
+        print("3. Pay Debts")
+        print("4. Exit")
+    
+    def process_choice(self, choice):
+        facade = PaymentFacade()
+        if choice == 1:
+            facade.add_funds()
+        elif choice == 2:
+            facade.check_balance()
+        elif choice == 3:
+            facade.pay_debts()
+        elif choice == 4:
+            return "exit"
+        return None
+
 submenu_classes = {
     1: CarMenu,
     2: CustomerMenu,
     3: BookingMenu,
     4: ReportMenu,
-    #5: "PaymentProcessingMenu", 
+    5: PaymentMenu,
     #6: RentalAgreementMenu,
     7: PricingMenu,
     8: GPSMenu
