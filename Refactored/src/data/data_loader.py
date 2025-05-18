@@ -5,7 +5,7 @@ from src.controllers.global_dicts import customers, CUSTOMERS_ID
 
 def load_customers():
     """
-    Carrega os dados dos clientes do arquivo JSON e atualiza o contador global
+    Loads customer data from JSON file and updates the global counter
     """
     global CUSTOMERS_ID
     
@@ -16,13 +16,13 @@ def load_customers():
             data = json.load(file)
             
         if not isinstance(data, list):
-            raise ValueError("O arquivo JSON deve conter uma lista de clientes")
+            raise ValueError("The JSON file must contain a list of customers")
             
         for customer_data in data:
             # Validação dos campos obrigatórios
             required_fields = ["email", "name", "wallet", "password"]
             if not all(field in customer_data for field in required_fields):
-                print(f"Aviso: Cliente com dados incompletos ignorado: {customer_data}")
+                print(f"Warning: Customer with incomplete data ignored: {customer_data}")
                 continue
                 
             try:
@@ -38,15 +38,15 @@ def load_customers():
                 CUSTOMERS_ID += 1
                 
             except (ValueError, TypeError) as e:
-                print(f"Erro ao criar cliente {customer_data.get('name', 'desconhecido')}: {str(e)}")
+                print(f"Error creating customer {customer_data.get('name', 'unknown')}: {str(e)}")
                 continue
                 
-        print(f"Carregados {len(customers)} clientes com sucesso!")
-        print(f"Próximo ID disponível: {CUSTOMERS_ID}")
+        print(f"Successfully loaded {len(customers)} customers!")
+        print(f"Next available ID: {CUSTOMERS_ID}")
         
     except FileNotFoundError:
-        print(f"Arquivo não encontrado: {json_path}")
+        print(f"File not found: {json_path}")
     except json.JSONDecodeError as e:
-        print(f"Erro ao decodificar o arquivo JSON: {str(e)}")
+        print(f"Error decoding JSON file: {str(e)}")
     except Exception as e:
-        print(f"Erro inesperado ao carregar clientes: {str(e)}")
+        print(f"Unexpected error loading customers: {str(e)}")

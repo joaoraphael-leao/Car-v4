@@ -25,7 +25,7 @@ class CarFacade:
     
     def update_car(self):
         self.show_cars()
-        car_id = int(input("Digite o ID do carro que deseja editar: "))
+        car_id = int(input("Enter the ID of the car you want to edit: "))
         self.controller.correct_car_data(car_id)
         
 #Customer Facade
@@ -45,14 +45,14 @@ class CustomerFacade:
         self.controller.show_customers()
     
     def find_customer(self):
-        customer_email = input("Digite o email do cliente: ")  # Recebe o ID do cliente do usuário no teclado
+        customer_email = input("Enter the customer email: ")  # Receives the customer ID from the user via keyboard
         self.controller.find_customer(customer_email)
     
     def update_customer(self):
         self.controller.update_customer()
 
     def delete_customer(self):
-        email = input("Digite o email do cliente a ser deletado: ")  # Recebe o ID do cliente do usuário no teclado
+        email = input("Enter the email of the customer to be deleted: ")  # Receives the customer ID from the user via keyboard
         self.controller.delete_customer(email)
     
 #Pricing Facade 
@@ -101,6 +101,9 @@ class BookingFacade:
     
     def give_feedback(self):
         self.controller.give_feedback()
+
+    def show_feedbacks(self):
+        self.controller.show_feedbacks()
 
 #Report Facade
 class ReportFacade:
@@ -153,8 +156,9 @@ class PaymentFacade:
         customer = login()
         if not customer:
             return False
-        amount = float(input("Digite o valor a ser adicionado: "))
+        amount = float(input("Enter the amount to be added: "))
         self.controller.add_funds(email=customer.email, amount=amount)
+        print("Funds added successfully!")
     
     def check_balance(self):
         customer = login()

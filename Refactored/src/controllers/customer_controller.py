@@ -46,7 +46,7 @@ def show_customers():
         return
 
     for email, customer in customers.items():
-        print(f"Email: {email}\nName: {customer.name}\nWallet: {customer.wallet}")
+        print(f"Email: {email}\nName: {customer.name}\nWallet: {customer.wallet}\nDebts: {customer.debts}")
         print("==================================================================")
 
 def find_customer(email):
@@ -70,9 +70,9 @@ def update_customer():
         customer.name = new_name
         print("Name updated successfully.")
     elif choice == '2':
-        amount = float(input("Enter amount to add: "))
-        customer.wallet_add(amount)
-        print("Funds added successfully.")
+        new_password = input("Enter new password: ")
+        customer.password = new_password
+        print("Password updated successfully.")
     else:
         print("Invalid choice.")
     

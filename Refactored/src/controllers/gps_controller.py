@@ -13,7 +13,7 @@ def generate_map(filename="car_tracking_map.html"):
                      if booking.latitude is not None and booking.longitude is not None}
     
     if not valid_bookings:
-        print("Nenhuma reserva com coordenadas válidas encontrada.")
+        print("No booking with valid coordinates found.")
         # Se não houver reservas válidas, criar um mapa centrado em São Paulo
         map_center = [-23.5505, -46.6333]  # São Paulo coordinates
         map = folium.Map(location=map_center, zoom_start=12)
@@ -50,7 +50,7 @@ def generate_map(filename="car_tracking_map.html"):
                 )
            
         except Exception as e:
-            print(f"Erro ao carregar ícone personalizado: {e}")
+            print(f"Error loading custom icon: {e}")
             icon = folium.Icon(color=marker_color, icon='car', prefix='fa')
         
         # Adicionar marcador para a reserva
@@ -94,7 +94,7 @@ def generate_car_map(car_id, filename="car_map.html"):
                    booking.latitude is not None and booking.longitude is not None}
     
     if not car_bookings:
-        print(f"Nenhuma reserva com coordenadas válidas encontrada para o carro {car_id}.")
+        print(f"No booking with valid coordinates found for car {car_id}.")
         return None
     
     # Usar a localização da primeira reserva como centro do mapa
@@ -137,7 +137,7 @@ def generate_car_map(car_id, filename="car_map.html"):
                 popup_anchor=(0, -15)
             )
         except Exception as e:
-            print(f"Erro ao carregar ícone personalizado: {e}")
+            print(f"Error loading custom icon: {e}")
             icon = folium.Icon(color='red', icon='car', prefix='fa')
             
         folium.Marker(

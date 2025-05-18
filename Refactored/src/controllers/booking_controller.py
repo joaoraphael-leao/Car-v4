@@ -51,10 +51,10 @@ def get_coordinates_from_address(address):
         if location:
             return location.latitude, location.longitude
         else:
-            print("Não foi possível obter coordenadas para o endereço fornecido.")
+            print("Could not obtain coordinates for the provided address.")
             return None, None
     except Exception as e:
-        print(f"Erro ao obter coordenadas: {e}")
+        print(f"Error obtaining coordinates: {e}")
         return None, None
 
 def convert_date_format(date_str):
@@ -64,21 +64,21 @@ def convert_date_format(date_str):
     """
     from datetime import datetime
     
-    # Tenta primeiro o formato YYYY-MM-DD
+    # First try YYYY-MM-DD format
     try:
         datetime.strptime(date_str, "%Y-%m-%d")
-        return date_str  # Já está no formato correto
+        return date_str  # Already in the correct format
     except ValueError:
         pass
     
-    # Tenta o formato DD-MM-YYYY
+    # Try DD-MM-YYYY format
     try:
         date_obj = datetime.strptime(date_str, "%d-%m-%Y")
-        return date_obj.strftime("%Y-%m-%d")  # Converte para YYYY-MM-DD
+        return date_obj.strftime("%Y-%m-%d")  # Convert to YYYY-MM-DD
     except ValueError:
-        # Se nenhum formato funcionar, orienta o usuário
-        print(f"Formato de data inválido: {date_str}. Use DD-MM-YYYY ou YYYY-MM-DD")
-        return date_str  # Retorna a string original para que o erro seja tratado posteriormente
+        # If no format works, guide the user
+        print(f"Invalid date format: {date_str}. Use DD-MM-YYYY or YYYY-MM-DD")
+        return date_str  # Return the original string so the error can be handled later
 
 def create_booking():
     global BOOKINGS_ID
@@ -129,27 +129,27 @@ def create_booking():
         new_book = booking.build()
         bookings[BOOKINGS_ID] = new_book
         BOOKINGS_ID += 1
-        print(f"Reserva criada com sucesso! ID: {BOOKINGS_ID-1}")
+        print(f"Booking created successfully! ID: {BOOKINGS_ID-1}")
         print(new_book)
         
-        # Adicionando o Rental Agreement simplificado
+        # Adding simplified Rental Agreement
         rental_agreement = {
-            "CONTRATO DE ALUGUEL": {
-                "ID da Reserva": BOOKINGS_ID-1,
-                "Cliente": customer_email,
-                "Carro ID": car_id,
-                "Modelo": car.model,
-                "Placa": car.license_plate,
-                "Data Início": start_date,
-                "Data Fim": end_date,
-                "Custo Total": f"R${cost:.2f}",
-                "Local de Retirada": address,
-                "Termos": [
-                    "1. Cliente responsável por danos",
-                    "2. Devolução na data acordada",
-                    "3. Multas por conta do cliente",
-                    "4. Seguro básico incluído",
-                    "5. Devolver com tanque cheio"
+            "RENTAL AGREEMENT": {
+                "Booking ID": BOOKINGS_ID-1,
+                "Customer": customer_email,
+                "Car ID": car_id,
+                "Model": car.model,
+                "License Plate": car.license_plate,
+                "Start Date": start_date,
+                "End Date": end_date,
+                "Total Cost": f"${cost:.2f}",
+                "Pickup Location": address,
+                "Terms": [
+                    "1. Customer responsible for damages",
+                    "2. Return on agreed date",
+                    "3. Traffic fines are customer's responsibility",
+                    "4. Basic insurance included",
+                    "5. Return with full tank"
                 ]
             }
         }
@@ -255,8 +255,7 @@ def calculate_booking_cost(car, start_date, end_date):
     days = (end_date - start_date).days
     return days * car.daily_rate
 
-def show_bookings_by_user():
-    email = input("Enter your email: ")
+def show_bookings_by_user(user_email):
     user_bookings = [booking for booking in bookings if booking.customer_email == user_email]
     if not user_bookings:
         print("No bookings found for this user.")
@@ -275,19 +274,19 @@ def give_feedback():
     if not booking:
         print("Booking not found.")
         return None
-    if booking.customer_email != email:
+    if booking.customer_email != user.email:
         print("You are not authorized to give feedback for this booking.")
         return None
     rating = input("Enter your rating (1-5): ")
     feedback = input("Enter your feedback: ")
     feedback = {
-        "user": email,
+        "user": user.email,
         "car": booking.car_id,
         "rating": rating,
         "feedback": feedback
     }
     feedbacks.append(feedback)
-
+    print("Feedback given successfully.")
 def show_feedbacks():
     for feedback in feedbacks:
         print(feedback)

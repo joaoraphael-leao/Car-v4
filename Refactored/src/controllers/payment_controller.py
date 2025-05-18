@@ -4,19 +4,19 @@ def add_funds(email, amount):
     try:
         customer = customers.get(email)
         if not customer:
-            print("Cliente não encontrado.")
+            print("Customer not found.")
             return False
         customer.wallet_add(float(amount))
-        print(f"Saldo adicionado com sucesso. Novo saldo: R${customer.wallet:.2f}")
+        print(f"Funds added successfully. New balance: R${customer.wallet:.2f}")
         return True
     except ValueError as e:
-        print(f"Erro ao adicionar fundos: {e}")
+        print(f"Error adding funds: {e}")
         return False
 
 def check_balance(email):
     customer = customers.get(email)
     if not customer:
-        print("Cliente não encontrado.")
+        print("Customer not found.")
         return None
     print(f"Wallet {customer.wallet}") 
 
@@ -24,21 +24,21 @@ def pay_debts(email):
     try:
         customer = customers.get(email)
         if not customer:
-            print("Cliente não encontrado.")
+            print("Customer not found.")
             return False
         if not customer.has_debts():
-            print("Não há débitos pendentes.")
+            print("There are no pending debts.")
             return True
             
         debts = customer.get_debts()
         if customer.wallet >= debts:
             customer.wallet_subtract(debts)
             customer.clear_debts()
-            print(f"Débitos de R${debts:.2f} pagos com sucesso. Novo saldo: R${customer.wallet:.2f}")
+            print(f"Debts of ${debts:.2f} paid successfully. New balance: ${customer.wallet:.2f}")
             return True
         else:
-            print(f"Saldo insuficiente. Débitos: R${debts:.2f}, Saldo: R${customer.wallet:.2f}")
+            print(f"Insufficient balance. Debts: ${debts:.2f}, Balance: ${customer.wallet:.2f}")
             return False
     except Exception as e:
-        print(f"Erro ao pagar débitos: {e}")
+        print(f"Error paying debts: {e}")
         return False

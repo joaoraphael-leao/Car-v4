@@ -28,7 +28,7 @@ class CarMenu(Menu):
         print("Car Management Menu")
         print("1. Add Car")
         print("2: List All Cars")
-        print("3 List Available Cars")
+        print("3: List Available Cars")
         print("4. Update Car")
         print("5. Exit")
         return
@@ -76,24 +76,24 @@ class CustomerMenu(Menu):
 
 class PricingMenu(Menu):
     def show_menu(self):
-        print("\n=== Gerenciamento de Preços e Ofertas ===")
-        print("1. Atualizar Preço Base")
-        print("2. Adicionar Oferta Especial")
-        print("3. Visualizar Ofertas Especiais")
-        print("4. Voltar")
+        print("\n=== Price and Offers Management ===")
+        print("1. Update Base Price")
+        print("2. Add Special Offer")
+        print("3. View Special Offers")
+        print("4. Back")
         
     def process_choice(self, choice):
         facade = PricingFacade()
-        if choice == "1":
+        if choice == 1:
             facade.update_car_price()
-        elif choice == "2":
+        elif choice == 2:
             facade.add_special_offer()
-        elif choice == "3":
+        elif choice == 3:
             facade.show_special_offers()
-        elif choice == "4":
+        elif choice == 4:
             return "exit"
         else:
-            print("Opção inválida!")
+            print("Invalid option!")
         return None
 
 class BookingMenu(Menu):
@@ -105,7 +105,8 @@ class BookingMenu(Menu):
         print("4. Update Booking")
         print("5. Show My Bookings")
         print("6. Give Feedback")
-        print("7. Exit")
+        print("7. Show Feedbacks")
+        print("8. Exit")
     
     def process_choice(self, choice):
         facade = BookingFacade()
@@ -122,6 +123,8 @@ class BookingMenu(Menu):
         elif choice == 6:
             facade.give_feedback()
         elif choice == 7:
+            facade.show_feedbacks()
+        elif choice == 8:
             return "exit"
         return None
 
@@ -188,9 +191,8 @@ submenu_classes = {
     3: BookingMenu,
     4: ReportMenu,
     5: PaymentMenu,
-    #6: RentalAgreementMenu,
-    7: PricingMenu,
-    8: GPSMenu
+    6: PricingMenu,
+    7: GPSMenu
 }
 
 class MainMenu:
@@ -204,10 +206,9 @@ class MainMenu:
             3: "Booking Management",
             4: "Report Management",
             5: "Payment Processing",
-            6: "Rental Agreements",
-            7: "Pricing and Offers",
-            8: "Car Tracking",
-            9: "Exit"
+            6: "Pricing and Offers",
+            7: "Car Tracking",
+            -1: "Exit"
         }
     
     def display(self):
@@ -248,7 +249,7 @@ class MainMenu:
             self.display()
             choice = self.get_user_choice()
             
-            if choice == 9:
+            if choice == -1:
                 print("Thank you for using the Car Rental System. Goodbye!")
                 break
             

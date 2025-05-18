@@ -14,7 +14,7 @@ class BookingBuilder:
     def com_location(self, latitude, longitude):
         self.__longitude = longitude
         self.__latitude = latitude
-        print(f"Localização definida: {latitude}, {longitude}")
+        print(f"Location set: {latitude}, {longitude}")
         return self
 
     def com_id(self, id_passed):
@@ -57,7 +57,7 @@ class BookingBuilder:
         if self.__cost is None:
             raise ValueError("Cost is required")
         if not self.__longitude or not self.__latitude:
-            raise ValueError("Erro: No coordinates book with that location")
+            raise ValueError("Error: No coordinates book with that location")
 
         return Booking(self.__car_id, self.__customer_email, self.__start_date, self.__end_date, self.__cost, self.__id, self.__longitude, self.__latitude)
 

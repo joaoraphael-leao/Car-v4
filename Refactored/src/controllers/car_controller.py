@@ -57,9 +57,9 @@ def show_cars_available_by_date(start_date, end_date):
             available_cars.append(car)
     
     if not available_cars:
-        print(f"Não há carros disponíveis no período de {start_date} a {end_date}.")
+        print(f"No cars available for the period from {start_date} to {end_date}.")
     else:
-        print(f"\nCarros disponíveis no período de {start_date} a {end_date}:")
+        print(f"\nCars available for the period from {start_date} to {end_date}:")
         for car in available_cars:
             print(car)
             print("-" * 30)
