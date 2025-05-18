@@ -27,7 +27,7 @@
     - Implemented.
 
 - **Rental Agreement Management**
-    - Not implemented ...
+    - Implemented in the time you book a car...
 - **GPS and Vehicle Tracking**
     - Implemented in the file 'src/controllers/gps_controller.py', using the library 'geopy' and folium.
     - We use the attributes 'latitude' and 'longitude' in the Booking class, 
